@@ -3,11 +3,12 @@
 Бот обеспечивает платные просмотры видео с YouTube на площадке Aviso
 
 ## Зависимости
-* Firefox
-* geckodriver
-* selenium
+- Firefox
+- [geckodriver](https://github.com/mozilla/geckodriver/releases)
+- [selenium](https://pypi.org/project/selenium/)
 
 ## Запуск
+
 Перед запуском бота запустить скрипт для записи файла с данными авторизации
 
 	python make_cookies.py
