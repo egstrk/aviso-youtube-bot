@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 option = Options()
 option.add_argument("--disable-notifications")
-#ioption.add_argument('--headless')
+option.add_argument('--headless')
 option.set_preference("media.volume_scale", "0.0")
 option.add_argument("--mute-audio") 
 browser = Firefox(options=option)
