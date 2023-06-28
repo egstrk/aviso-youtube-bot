@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 option = Options()
 option.add_argument("--disable-notifications")
-option.add_argument('--headless')
+#ioption.add_argument('--headless')
 option.set_preference("media.volume_scale", "0.0")
 option.add_argument("--mute-audio") 
 browser = Firefox(options=option)
@@ -118,6 +118,7 @@ class BuxTask:
 
 
     def hide(self):
+        browser.switch_to.window(browser.window_handles[0])
         self.corner.find_element(By.XPATH, ".//a[contains(@title, 'Скрыть площадку')]").click()
         print("Task hidden")
         del self
@@ -175,6 +176,7 @@ def start_video(expected_time) -> bool:
     return True
 
 def close_video():
+    browser.switch_to.window(browser.window_handles[1])
     browser.close()
     browser.switch_to.window(browser.window_handles[0])
                                                         
