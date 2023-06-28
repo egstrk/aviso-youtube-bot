@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 option = Options()
 option.add_argument("--disable-notifications")
-option.add_argument('--headless')
+#ioption.add_argument('--headless')
 option.set_preference("media.volume_scale", "0.0")
 option.add_argument("--mute-audio") 
 browser = Firefox(options=option)
@@ -134,7 +134,10 @@ def get_task_list():
 
 def start_video(expected_time) -> bool:
 
-    wait.until(EC.presence_of_element_located((By.ID, "tmr")))
+    try:
+        wait.until(EC.presence_of_element_located((By.ID, "tmr")))
+    except:
+        return False
     tmr = browser.find_element(By.ID, "tmr")
     
     succes_error = browser.find_element(By.ID, "succes-error")
@@ -186,14 +189,16 @@ while True:
     task_number = len(task_list)
     if task_number == 0:
         print("There's no any task. Sleeping for 15 minutes...")
-        time.sleep(10)
+        time.sleep(900)
     elif task_number > 1:
         task_list.sort(key = lambda x: x.views_number)
     for task in task_list:
         task.print_()
         if task.type == YOUTUBE_VIEW:
             if task.activate():
-                start_video(task.time)
+                if not start_video(task.time):
+                    task.hide()
+                    wait.until(EC.staleness_of(task.corner))
                 close_video()
             else:
                 task.hide()
