@@ -11,7 +11,7 @@ from selenium.common.exceptions import NoSuchElementException
 
 option = Options()
 option.add_argument("--disable-notifications")
-option.add_argument('--headless')
+#option.add_argument('--headless')
 option.set_preference("media.volume_scale", "0.0")
 option.add_argument("--mute-audio") 
 browser = Firefox(options=option)
@@ -155,7 +155,7 @@ def start_video(expected_time) -> bool:
 
     browser.switch_to.window(browser.window_handles[1])
     
-    timeout = expexted_time + 10.0
+    timeout = expected_time + 10.0
     while tmr.text != "0":
         time.sleep(0.5)
         timeout = timeout - 0.5
