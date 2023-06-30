@@ -17,7 +17,6 @@ option.add_argument("--mute-audio")
 browser = Firefox(options=option)
 wait = WebDriverWait(browser, 15)
 
-
 def aviso_sign_in():
     browser.get("https://aviso.bz/")
     for cookie in pickle.load(open('cookie', "rb")):
@@ -47,7 +46,7 @@ class BuxTask:
         self.views_number   = self.__get_views_number()
         self.cost           = self.__get_cost()
         self.start_button   = {}
-    
+
     def __get_id(self):
         if self.type == YOUTUBE_VIEW:
             prefix = "ads-link-"
@@ -122,7 +121,7 @@ class BuxTask:
         self.corner.find_element(By.XPATH, ".//a[contains(@title, 'Скрыть площадку')]").click()
         print("Task hidden")
         del self
-            
+
 
 def get_task_list():
     tasks = browser.find_elements(By.CLASS_NAME, "work-serf")
@@ -146,19 +145,24 @@ def start_video(expected_time) -> bool:
     wait.until(EC.presence_of_element_located((By.ID, "video-start")))
     wait.until(EC.element_to_be_clickable((By.ID, "video-start")))
     browser.switch_to.frame("video-start")
-    
+
     try:
         button_play = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "ytp-large-play-button")))
     except:
         print("Video unavailable")
         return False
     button_play.click()
-    
-    browser.switch_to.window(browser.window_handles[1])
 
+    browser.switch_to.window(browser.window_handles[1])
+    
+    timeout = expexted_time + 10.0
     while tmr.text != "0":
         time.sleep(0.5)
-   
+        timeout = timeout - 0.5
+        if overtime <= 0
+            print("Timeout during video playback")
+            return False
+
     try:
         wait.until(EC.any_of(
             EC.text_to_be_present_in_element((By.ID, "succes-error"), "С учетом рефбека"),
@@ -179,7 +183,7 @@ def close_video():
     browser.switch_to.window(browser.window_handles[1])
     browser.close()
     browser.switch_to.window(browser.window_handles[0])
-                                                        
+
 aviso_sign_in()
 
 
