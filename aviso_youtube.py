@@ -159,7 +159,7 @@ def start_video(expected_time) -> bool:
     while tmr.text != "0":
         time.sleep(0.5)
         timeout = timeout - 0.5
-        if overtime <= 0
+        if timeout <= 0:
             print("Timeout during video playback")
             return False
 
