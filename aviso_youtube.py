@@ -7,7 +7,7 @@ from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, ElementNotInteractableException
 
 option = Options()
 option.add_argument("--disable-notifications")
@@ -98,7 +98,10 @@ class BuxTask:
         print(f"{self.id}\t{self.type}\t{self.cost}\t{self.views_number}\t{self.time}\t{self.url}")
 
     def activate(self) -> bool:
-        browser.execute_script("arguments[0].click();", self.link)
+        try:
+            browser.execute_script("arguments[0].click();", self.link)
+        except:
+            return False
         try:
             start_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, "go-link-youtube")))
         except:
@@ -118,7 +121,10 @@ class BuxTask:
 
     def hide(self):
         browser.switch_to.window(browser.window_handles[0])
-        self.corner.find_element(By.XPATH, ".//a[contains(@title, 'Скрыть площадку')]").click()
+        try:
+            self.corner.find_element(By.XPATH, ".//a[contains(@title, 'Скрыть площадку')]").click()
+        except StaleElementReferenceException: 
+            pass
         print("Task hidden")
         del self
 
@@ -168,8 +174,11 @@ def start_video(expected_time) -> bool:
             EC.text_to_be_present_in_element((By.ID, "succes-error"), "С учетом рефбека"),
             EC.text_to_be_present_in_element((By.ID, "succes-error"), "Ошибка")))
     except:
-        browser.switch_to.frame("video-start")
-        browser.find_element(By.CLASS_NAME, "ytp-large-play-button").click()
+        try:
+            browser.switch_to.frame("video-start")
+            browser.find_element(By.CLASS_NAME, "ytp-large-play-button").click()
+        except:
+            return False
         browser.switch_to.window(browser.window_handles[1])
         wait.until(EC.text_to_be_present_in_element((By.ID, "succes-error"), "С учетом рефбека"))
         succes_error = browser.find_element(By.ID, "succes-error")
