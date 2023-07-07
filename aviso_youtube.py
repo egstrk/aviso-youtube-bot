@@ -135,7 +135,8 @@ def get_task_list():
     task_list = []
     for task in tasks:
         new_task = BuxTask(task)
-        task_list.append(new_task)
+        if new_task.type == YOUTUBE_VIEW:
+            task_list.append(new_task)
     return task_list
 
 def start_video(expected_time) -> bool:
@@ -209,15 +210,11 @@ while True:
         task_list.sort(key = lambda x: x.views_number)
     for task in task_list:
         task.print_()
-        if task.type == YOUTUBE_VIEW:
-            if task.activate():
-                if not start_video(task.time):
-                    task.hide()
-                    wait.until(EC.staleness_of(task.corner))
-                close_video()
-            else:
+        if task.activate():
+            if not start_video(task.time):
                 task.hide()
                 wait.until(EC.staleness_of(task.corner))
+            close_video()
         else:
             task.hide()
             wait.until(EC.staleness_of(task.corner))
